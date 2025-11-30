@@ -1,46 +1,81 @@
 package ua.opnu;
 
-
 public class TimeSpan {
 
-    // TODO: add class fields
+    private int hours;
+    private int minutes;
 
-    TimeSpan(int hours, int minutes) {
-        // TODO: write constructor body
+    public TimeSpan(int hours, int minutes) {
+        if (hours < 0 || minutes < 0) {
+            throw new IllegalArgumentException("Час не може бути від'ємним");
+        }
+        this.hours = hours + (minutes / 60);
+        this.minutes = minutes % 60;
     }
 
     int getHours() {
-        return 0;
+        return this.hours;
     }
 
     int getMinutes() {
-        // TODO: write method body
-        return 0;
+        return this.minutes;
     }
 
     void add(int hours, int minutes) {
-        // TODO: write method body
+        if (hours < 0 || minutes < 0) {
+            throw new IllegalArgumentException("Аргументи не можуть бути від'ємними");
+        }
+
+        int totalCurrentMinutes = this.getTotalMinutes();
+        int totalNewMinutes = (hours * 60) + minutes;
+
+        int sumMinutes = totalCurrentMinutes + totalNewMinutes;
+
+        this.hours = sumMinutes / 60;
+        this.minutes = sumMinutes % 60;
     }
 
     void addTimeSpan(TimeSpan timespan) {
-        // TODO: write method body
+        if (timespan != null) {
+            add(timespan.getHours(), timespan.getMinutes());
+        }
     }
 
     double getTotalHours() {
-        // TODO: write method body
-        return 0;
+        return this.hours + (this.minutes / 60.0);
     }
 
     int getTotalMinutes() {
-        // TODO: write method body
-        return 0;
+        return (this.hours * 60) + this.minutes;
     }
 
     void subtract(TimeSpan span) {
-        // TODO: write method body
+        if (span == null) return;
+
+        int currentTotal = this.getTotalMinutes();
+        int otherTotal = span.getTotalMinutes();
+
+        if (currentTotal >= otherTotal) {
+            int diff = currentTotal - otherTotal;
+            this.hours = diff / 60;
+            this.minutes = diff % 60;
+        }
     }
 
     void scale(int factor) {
-        // TODO: write method body
+        if (factor <= 0) {
+            throw new IllegalArgumentException("Фактор має бути більше 0");
+        }
+
+        int totalMinutes = this.getTotalMinutes();
+        int scaledTotal = totalMinutes * factor;
+
+        this.hours = scaledTotal / 60;
+        this.minutes = scaledTotal % 60;
+    }
+
+    @Override
+    public String toString() {
+        return hours + "h " + minutes + "m";
     }
 }
